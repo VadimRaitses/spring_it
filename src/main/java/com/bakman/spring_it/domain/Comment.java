@@ -1,24 +1,26 @@
 package com.bakman.spring_it.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+@Setter
+@Getter
 @Entity
+@ToString
+@RequiredArgsConstructor
 @NoArgsConstructor
-@Data
 public class Comment extends Auditable {
 
     @Id
     @GeneratedValue
     private Long id;
-    private String body;
+    private @NonNull String body;
 
     @ManyToOne
-    private Link link;
+    private @NonNull Link link;
 
 }
