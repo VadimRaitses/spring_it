@@ -10,8 +10,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Profile;
 
 @SpringBootApplication
 @EnableConfigurationProperties
@@ -27,8 +25,9 @@ public class SpringItApplication {
         SpringApplication.run(SpringItApplication.class, args);
     }
 
-    @Bean
-    @Profile("dev")
+    
+//    @Bean
+//    @Profile("dev")
     CommandLineRunner runner(LinkRepository linkRepository, CommentRepository commentRepository) {
         return args -> {
             Link link = new Link("getting started with spring boot 2", "https://therealdanvega.com/spring-boot-2-docs");
