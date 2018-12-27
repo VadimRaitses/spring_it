@@ -1,0 +1,45 @@
+package com.bakman.spring_it.controller;
+
+import com.bakman.spring_it.domain.Link;
+import com.bakman.spring_it.repository.LinkRepository;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/links/")
+public class LinkController {
+
+    private final LinkRepository linkRepository;
+
+    public LinkController(LinkRepository linkRepository) {
+        this.linkRepository = linkRepository;
+    }
+
+    @GetMapping("/")
+    public List<Link> list() {
+        return linkRepository.findAll();
+    }
+
+    @PostMapping("/create")
+    public Link create(@ModelAttribute Link link) {
+        return linkRepository.save(link);
+    }
+
+    @GetMapping("/{id}")
+    public Optional<Link> read(@PathVariable Long id) {
+        return linkRepository.findById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Link update(@PathVariable Long id, @ModelAttribute Link link) {
+//        Link l = linkRepository.getOne(id);
+        return linkRepository.save(link);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        linkRepository.deleteById(id);
+    }
+}

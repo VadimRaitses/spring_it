@@ -25,7 +25,7 @@ public class SpringItApplication {
         SpringApplication.run(SpringItApplication.class, args);
     }
 
-    
+
 //    @Bean
 //    @Profile("dev")
     CommandLineRunner runner(LinkRepository linkRepository, CommentRepository commentRepository) {

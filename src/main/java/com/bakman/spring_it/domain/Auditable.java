@@ -57,14 +57,4 @@ public abstract class Auditable {
     public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
-
-    @Override
-    public String toString() {
-        return "Auditable{" +
-                "createdBy='" + createdBy + '\'' +
-                ", creationDate=" + creationDate +
-                ", lastModifiedBy='" + lastModifiedBy + '\'' +
-                ", lastModifiedDate=" + lastModifiedDate +
-                '}';
-    }
 }
