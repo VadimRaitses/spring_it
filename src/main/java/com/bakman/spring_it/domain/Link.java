@@ -1,29 +1,58 @@
 package com.bakman.spring_it.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import com.bakman.spring_it.service.BeanUtil;
+import lombok.*;
+import org.hibernate.validator.constraints.URL;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotEmpty;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
-@Data
+@RequiredArgsConstructor
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 public class Link extends Auditable {
 
     @Id
     @GeneratedValue
     private Long id;
-    private @NonNull String title;
-    private @NonNull String url;
+
+    private @NonNull @NotEmpty(message = "Please enter a title.") String title;
+
+    private @NonNull @NotEmpty(message = "Please enter a url.") @URL(message = "Please enter a valid url.") String url;
 
     @OneToMany(mappedBy = "link")
     private List<Comment> comments = new ArrayList<>();
 
+    public void addComment(Comment comment) {
+        comments.add(comment);
+    }
 
+    public String getDomainName() throws URISyntaxException {
+        URI uri = new URI(this.url);
+        String domain = uri.getHost();
+        return domain.startsWith("www.") ? domain.substring(4) : domain;
+    }
+
+    public String getPrettyTime() {
+        PrettyTime pt = BeanUtil.getBean(PrettyTime.class);
+        return pt.format(convertToDateViaInstant(getCreationDate()));
+    }
+
+    private Date convertToDateViaInstant(LocalDateTime dateToConvert) {
+        return java.util.Date.from(dateToConvert.atZone(ZoneId.systemDefault()).toInstant());
+    }
 }
