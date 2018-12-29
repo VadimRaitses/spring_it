@@ -1,27 +1,44 @@
 package com.bakman.spring_it.bootstrap;
 
 import com.bakman.spring_it.domain.Link;
+import com.bakman.spring_it.domain.Role;
+import com.bakman.spring_it.domain.User;
 import com.bakman.spring_it.repository.CommentRepository;
 import com.bakman.spring_it.repository.LinkRepository;
+import com.bakman.spring_it.repository.RoleRepository;
+import com.bakman.spring_it.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
+@SuppressWarnings("ALL")
 @Component
 public class DatabaseLoader implements CommandLineRunner {
 
     private final LinkRepository linkRepository;
     private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
-    public DatabaseLoader(LinkRepository linkRepository, CommentRepository commentRepository) {
+    public DatabaseLoader(LinkRepository linkRepository, CommentRepository commentRepository, UserRepository userRepository, RoleRepository roleRepository) {
         this.linkRepository = linkRepository;
         this.commentRepository = commentRepository;
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
     public void run(String... args) {
+        addUsersAndRoles();
+        addLinks();
+    }
+
+    private void addLinks() {
         Map<String, String> links = new HashMap<>();
         links.put("Securing Spring Boot APIs and SPAs with OAuth 2.0", "https://auth0.com/blog/securing-spring-boot-apis-and-spas-with-oauth2/?utm_source=reddit&utm_medium=sc&utm_campaign=springboot_spa_securing");
         links.put("Easy way to detect Device in Java Web Application using Spring Mobile - Source code to download from GitHub", "https://www.opencodez.com/java/device-detection-using-spring-mobile.htm");
@@ -42,5 +59,28 @@ public class DatabaseLoader implements CommandLineRunner {
 
         long linkCount = linkRepository.count();
         System.out.println("Number of links in the database: " + linkCount);
+    }
+
+    private void addUsersAndRoles() {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String secret = "{bcrypt}" + encoder.encode("password");
+
+        Role userRole = new Role("ROLE_USER");
+        roleRepository.save(userRole);
+        Role adminRole = new Role("ROLE_ADMIN");
+        roleRepository.save(adminRole);
+
+        User user = new User("user@gmail.com", secret, true);
+        user.addRole(userRole);
+        userRepository.save(user);
+
+        User admin = new User("admin@gmail.com", secret, true);
+        admin.addRole(adminRole);
+        userRepository.save(admin);
+
+        User master = new User("super@gmail.com", secret, true);
+        master.addRoles(new HashSet<>(Arrays.asList(userRole, adminRole)));
+        userRepository.save(master);
+
     }
 }
