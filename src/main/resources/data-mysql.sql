@@ -1,5 +1,3 @@
--- this file MUST be named data.sql in order to work
-
 INSERT INTO link (id,creation_date,last_modified_date,created_by,last_modified_by,title,url)
 VALUES (1,NOW(),NOW(),null,null,'Getting Started with Spring Boot 2','https://therealdanvega.com/spring-boot-2');
 

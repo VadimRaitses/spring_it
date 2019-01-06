@@ -1,13 +1,11 @@
--- this file MUST be named schema-mysql.sql in order to work
-
-
-CREATE SCHEMA  IF NOT EXISTS `springit`;
+CREATE DATABASE  IF NOT EXISTS `springit`;
 USE `springit`;
 
 --
 -- Table structure for table `comment`
 --
 DROP TABLE IF EXISTS `comment`;
+
 CREATE TABLE `comment` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `created_by` varchar(255) DEFAULT NULL,
@@ -18,15 +16,13 @@ CREATE TABLE `comment` (
   `link_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FKoutxw6g1ndh1t6282y0fwvami` (`link_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
--- --
--- -- Table structure for table `link`
--- --
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Table structure for table `link`
 --
 
-
 DROP TABLE IF EXISTS `link`;
-
 CREATE TABLE `link` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `created_by` varchar(255) DEFAULT NULL,
@@ -36,4 +32,4 @@ CREATE TABLE `link` (
   `title` varchar(255) DEFAULT NULL,
   `url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
